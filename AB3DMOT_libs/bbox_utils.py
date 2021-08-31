@@ -24,7 +24,7 @@ def convex_hull_intersection(p1, p2):
 		p1,p2 are a list of (x,y) tuples of hull vertices.
 		return a list of (x,y) for the intersection and its volume
 	"""
-	inter_p = polygon_clip(p1,p2)
+	inter_p = polygon_clip(p1,p2)   # 这里使用了多边形裁剪的方法（Sutherland Hodgman算法获得交点）
 	if inter_p is not None:
 		hull_inter = ConvexHull(inter_p)
 		return inter_p, hull_inter.volume
@@ -88,13 +88,14 @@ def iou3d(corners1, corners2):
 	todo (rqi): add more description on corner points' orders.
 	'''
 	# corner points are in counter clockwise order
-	rect1 = [(corners1[i,0], corners1[i,2]) for i in range(3,-1,-1)]
-	rect2 = [(corners2[i,0], corners2[i,2]) for i in range(3,-1,-1)] 
+	rect1 = [(corners1[i,0], corners1[i,2]) for i in range(3,-1,-1)]  # (4,2): 4 corners in x-z the axis
+	rect2 = [(corners2[i,0], corners2[i,2]) for i in range(3,-1,-1)]  # (4,2)
+	# compute ply area
 	area1 = poly_area(np.array(rect1)[:,0], np.array(rect1)[:,1])
 	area2 = poly_area(np.array(rect2)[:,0], np.array(rect2)[:,1])
 
 	# inter_area = shapely_polygon_intersection(rect1, rect2)
-	_, inter_area = convex_hull_intersection(rect1, rect2)
+	_, inter_area = convex_hull_intersection(rect1, rect2) 	# 使用convex_hull方法
 
 	# try:
 	#   _, inter_area = convex_hull_intersection(rect1, rect2)
@@ -104,6 +105,7 @@ def iou3d(corners1, corners2):
 	#   inter_area = 0
 
 	iou_2d = inter_area/(area1+area2-inter_area)
+	# 计算高度差(y-axis)
 	ymax = min(corners1[0,1], corners2[0,1])
 	ymin = max(corners1[4,1], corners2[4,1])
 	inter_vol = inter_area * max(0.0, ymax-ymin)

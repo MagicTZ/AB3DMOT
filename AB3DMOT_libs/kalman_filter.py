@@ -2,7 +2,7 @@
 # email: xinshuo.weng@gmail.com
 
 import numpy as np
-from filterpy.kalman import KalmanFilter
+from filterpy.kalman import KalmanFilter  # 引入专业filter lib
 
 class KalmanBoxTracker(object):
 	"""
@@ -57,7 +57,7 @@ class KalmanBoxTracker(object):
 		#                       [0,0,0,0,0,0,1,0,0,0,0]])
 
 		
-		# self.kf.R[0:,0:] *= 10.   # measurement uncertainty
+		# self.kf.R[0:,0:] *= 10.   # measurement uncertainty （TODO: 为什么注释掉？）
 		self.kf.P[7:, 7:] *= 1000. 	# state uncertainty, give high uncertainty to the unobservable initial velocities, covariance matrix
 		self.kf.P *= 10.
 
@@ -65,7 +65,7 @@ class KalmanBoxTracker(object):
 		self.kf.Q[7:, 7:] *= 0.01
 		self.kf.x[:7] = bbox3D.reshape((7, 1))
 
-		self.time_since_update = 0
+		self.time_since_update = 0		# 记录从更新后经过的帧数
 		self.id = KalmanBoxTracker.count
 		KalmanBoxTracker.count += 1
 		self.history = []
@@ -83,7 +83,7 @@ class KalmanBoxTracker(object):
 		self.time_since_update = 0
 		self.history = []
 		self.hits += 1
-		self.hit_streak += 1          # number of continuing hit
+		self.hit_streak += 1          # number of continuing hit （连续跟踪的帧数）
 		if self.still_first:
 			self.first_continuing_hit += 1      # number of continuing hit in the fist time
 

@@ -20,8 +20,7 @@ title = {{AB3DMOT: A Baseline for 3D Multi-Object Tracking and New Evaluation Me
 year = {2020} 
 }
 ```
-
-<img align="center" width="98%" src="https://github.com/xinshuoweng/AB3DMOT/blob/master/main.gif">
+![](main.gif)
 
 ## Overview
 - [News](#news)
